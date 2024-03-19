@@ -1,3 +1,0 @@
-import Game
-
-game = Game()
