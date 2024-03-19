@@ -8,6 +8,7 @@ class State():
     def __init__(self, deck: deck, trump: card):
         self.deck = deck
         self.trump = trump
+<<<<<<< HEAD
         self.floor = []
         self.hands = {}
         self.players = []
@@ -50,3 +51,8 @@ class State():
 
     def reset_floor():
         pass
+=======
+        self.players = []
+    
+        
+>>>>>>> b00a8cc1e455b296f77be09f80745e858a67910a
