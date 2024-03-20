@@ -47,9 +47,15 @@ class State():
         """Returns the player_roles dictionary"""
         return self.player_roles
     
+
     def get_floor(self):
         """Returns the floor"""
         return self.floor
+    
+    
+    def get_player_hand(self, player):
+        """Returns a player's hand"""
+        return self.hands[player]
     
     
     def set_players(self, players_arg: List[Player]): # only at the beginning
