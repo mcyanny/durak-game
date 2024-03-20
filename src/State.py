@@ -14,7 +14,7 @@ class State():
         self.hands = {} #key: player, value: list of cards
         self.players = []
         self.player_roles = {'attacker': None, 'second_attacker': None, 'defender': None}
-        self.deal_cards()
+
         
 
     def deal_cards(self):
@@ -33,11 +33,15 @@ class State():
         players_arg: List[Player]
         """
         self.players = players_arg
+        for player in players:
+            self.hands[player] = None
+        
 
     def set_player_roles(self):
         if (self.player_roles['attacker'] == None): #start of game, picks attacker with the lowest trump card
             pass
         else:
+            pass
 
 
                 

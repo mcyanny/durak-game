@@ -1,4 +1,5 @@
 from State import State
+from Player import Player
 from random import shuffle
 from typing import *
 
@@ -8,18 +9,17 @@ deck_type = List[card]
 
 
 class Game:
-    def __init__(self, num_players_arg: int = None,
+    def __init__(self, num_players_arg: int = 2,
                  SUITS: Tuple[str] = ('♥', '♦', '♣', '♠'),
                  CARDS_PER_HAND: int = 6,
                  CARD_MIN_MAX: Tuple[int, int] = (6, 15),  # Fixed the variable name here
-                 PLAYERS_MIN_MAX: Tuple[int, int] = (2, 5),
-                 num_players = 2):
+                 PLAYERS_MIN_MAX: Tuple[int, int] = (2, 5)):
 
         self.SUITS = SUITS
         self.CARDS_PER_HAND = CARDS_PER_HAND
         self.CARD_MIN_MAX = CARD_MIN_MAX
         self.PLAYERS_MIN_MAX = PLAYERS_MIN_MAX
-        self.num_players = num_players
+        self.num_players = num_players_arg
 
         self.states_tree = None # TODO implement later.
 
@@ -37,8 +37,11 @@ class Game:
     def init_players(self, state):
         """Initializes the players in the game's state"""
         # TODO initialize the players
-        for player in range(self.num_players):
-            pass
+        players = []
+        for player in range(0, self.num_players):
+            player = Player()
+            players.append(player)
+        state.set_players(players)
 
 
     def generate_deck(self):
