@@ -19,11 +19,28 @@ class State():
 
     def deal_cards(self):
         """draws cards til 6 for each player"""
+        first_player = self.players[0]
+        lowest_trump = 15
+        
         for player in self.players:
             self.hands[player] = []
-            while (len(self.hands[player]) < 6):
-                self.hands[player].append(self.deck.pop())
+            while len(self.hands[player]) < 6:
+                new_card = self.deck.pop()
+                if new_card[1] == self.trump_suit and new_card[0] < lowest_trump:
+                    first_player = player
+                self.hands[player].append(new_card)
         
+        if len(self.players) > 2:
+            attacker_index = self.players.index(first_player)
+            self.player_roles['attacker'] = first_player
+            self.player_roles['defender'] = self.players[(attacker_index + 1) % len(self.players)]
+            self.player_roles['second_attacker'] = self.players[(attacker_index + 2) % len(self.players)]  
+               
+        else:
+            attacker_index = self.players.index(first_player)
+            self.player_roles['attacker'] = first_player
+            self.player_roles['defender'] = self.players[(attacker_index + 1) % len(self.players)]
+
     
     """GETTERS AND SETTERS"""
     def get_player_roles(self):
@@ -35,7 +52,7 @@ class State():
         return self.floor
     
     
-    def set_players(self, players_arg: List[Player]):
+    def set_players(self, players_arg: List[Player]): # only at the beginning
         """
         Sets self.players to players_arg
         FROM GAME CLASS
@@ -44,13 +61,6 @@ class State():
         players_arg: List[Player]
         """
         self.players = players_arg
-        
-
-    def set_player_roles(self):
-        if (self.player_roles['attacker'] == None): #start of game, picks attacker with the lowest trump card
-            pass
-        else:
-            pass
 
 
     def draw_cards(self):
@@ -68,6 +78,3 @@ class State():
     def reset_floor():
         #TODO
         pass
-        self.players = []
-    
-    
