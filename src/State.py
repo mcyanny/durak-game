@@ -13,10 +13,11 @@ class State():
         self.floor = []
         self.hands = {} #key: player, value: list of cards
         self.players = []
-        self.player_roles = {'attacker': None, 'second_attacker': None, 'defender': None}
+        self.player_roles = {'attacker': None, 'second_attacker': None, 'defender': None, 'others': []}
 
         # TODO merge deal and draw
 
+    """INIT METHODS (run once)"""
     def deal_cards(self):
         """draws cards til 6 for each player"""
         first_player = self.players[0]
@@ -41,6 +42,7 @@ class State():
             self.player_roles['attacker'] = first_player
             self.player_roles['defender'] = self.players[(attacker_index + 1) % len(self.players)]
 
+<<<<<<< HEAD
     
     """GETTERS AND SETTERS"""
     def get_player_roles(self):
@@ -58,6 +60,8 @@ class State():
         return self.hands[player]
     
     
+=======
+>>>>>>> 5990df794547c5ad9b44fa621ada3e741c16b4ca
     def set_players(self, players_arg: List[Player]): # only at the beginning
         """
         Sets self.players to players_arg
@@ -67,12 +71,29 @@ class State():
         players_arg: List[Player]
         """
         self.players = players_arg
+    
+    """GETTERS AND SETTERS"""
+    def get_player_roles(self):
+        """Returns the player_roles dictionary"""
+        return self.player_roles
+    
+    def get_floor(self):
+        """Returns the floor"""
+        return self.floor
 
 
+    """DRAW CARDS NIGGA"""
     def draw_cards(self):
         """draws cards til 6 for each player"""
-        for player in self.players:
-            while (len(self.hands[player]) < 6):
+        draw(self.player_roles['attacker'])
+        draw(self.player_roles['second_attacker'])
+        others = self.player_roles['others']
+        for player in others:
+            draw(others)
+        draw(self.player_roles['defender'])
+        
+        def draw(player):
+            while (len(self.hands[player]) < 6 and len(self.deck) > 0):
                 self.hands[player].append(self.deck.pop())
 
 
