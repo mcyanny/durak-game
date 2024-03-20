@@ -20,6 +20,7 @@ class State():
     def deal_cards(self):
         """draws cards til 6 for each player"""
         for player in self.players:
+            self.hands[player] = None
             while (len(self.hands[player]) < 6):
                 self.hands[player].append(self.deck.pop())
         
@@ -33,8 +34,6 @@ class State():
         players_arg: List[Player]
         """
         self.players = players_arg
-        for player in players:
-            self.hands[player] = None
         
 
     def set_player_roles(self):
