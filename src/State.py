@@ -15,7 +15,7 @@ class State():
         self.players = []
         self.player_roles = {'attacker': None, 'second_attacker': None, 'defender': None}
 
-        
+        # TODO merge deal and draw
 
     def deal_cards(self):
         """draws cards til 6 for each player"""
@@ -24,6 +24,16 @@ class State():
             while (len(self.hands[player]) < 6):
                 self.hands[player].append(self.deck.pop())
         
+    
+    """GETTERS AND SETTERS"""
+    def get_player_roles(self):
+        """Returns the player_roles dictionary"""
+        return self.player_roles
+    
+    def get_floor(self):
+        """Returns the floor"""
+        return self.floor
+    
     
     def set_players(self, players_arg: List[Player]):
         """
@@ -43,7 +53,6 @@ class State():
             pass
 
 
-                
     def draw_cards(self):
         """draws cards til 6 for each player"""
         for player in self.players:
@@ -61,4 +70,4 @@ class State():
         pass
         self.players = []
     
-        
+    
