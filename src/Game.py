@@ -27,6 +27,7 @@ class Game:
 
 
     def init_state(self):
+        """Returns the starting state of the game"""
         trump = self.deck[0]  # Assigning the trump properly
         
         state = State(self.deck, trump)
@@ -34,6 +35,7 @@ class Game:
 
 
     def init_players(self, state):
+        """Initializes the players in the game's state"""
         # TODO initialize the players
         for player in range(self.num_players):
             pass
