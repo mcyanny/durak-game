@@ -42,23 +42,6 @@ class State():
             self.player_roles['attacker'] = first_player
             self.player_roles['defender'] = self.players[(attacker_index + 1) % len(self.players)]
 
-    
-    """GETTERS AND SETTERS"""
-    def get_player_roles(self):
-        """Returns the player_roles dictionary"""
-        return self.player_roles
-    
-
-    def get_floor(self):
-        """Returns the floor"""
-        return self.floor
-    
-    
-    def get_player_hand(self, player: Player) -> deck_type:
-        """Returns a player's hand"""
-        return self.hands[player]
-    
-    
     def set_players(self, players_arg: List[Player]): # only at the beginning
         """
         Sets self.players to players_arg
@@ -69,8 +52,8 @@ class State():
         """
         self.players = players_arg
     
-
-    def get_player_roles(self) -> Dict[str, Player]:
+    """GETTERS AND SETTERS"""
+    def get_player_roles(self):
         """Returns the player_roles dictionary"""
         return self.player_roles
     
@@ -79,7 +62,7 @@ class State():
         return self.floor
 
 
-    """DRAW CARDS NIGGA"""
+    """DRAW CARDS"""
     def draw_cards(self):
         """draws cards til 6 for each player"""
         draw(self.player_roles['attacker'])
