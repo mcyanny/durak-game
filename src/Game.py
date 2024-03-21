@@ -23,7 +23,7 @@ class Game:
 
         self.states_tree = None # TODO implement later.
 
-        self.generate_deck() # sets self.deck to a deck_type
+        self.generate_deck() # sets self.deck to a full shuffled deck_type
 
 
     def init_state(self):
@@ -42,12 +42,13 @@ class Game:
             player = Player()
             players.append(player)
         state.set_players(players)
+        return players
 
 
     def generate_deck(self):
         """Generates a deck: List[Tuple[int, str]]"""
         self.deck = [(value, suit) for value in 
-                     range(self.CARD_MIN_MAX[0], self.CARD_MIN_MAX[1]) 
-                     for suit in self.SUITS]
+                        range(self.CARD_MIN_MAX[0], self.CARD_MIN_MAX[1]) 
+                        for suit in self.SUITS]
         shuffle(self.deck) # Shuffles self.deck in place
 

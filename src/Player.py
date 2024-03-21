@@ -1,4 +1,4 @@
-from State import State
+from copy import deepcopy
 
 class Player():
     def __init__(self):
@@ -22,16 +22,16 @@ class Player():
         pass
 
 
-    def generate_attack_conditions(self, state):
+    def get_viable_attack_cards(self, state):
+        """Returns the cards that a player can use"""
         floor = self.get_floor()
+        me = self.get_self()
+        hand = deepcopy(state.get_player_hand(self))
         if floor:
-            me = self.get_self()
-            hand = state.get_player_hand(self)
-
-            # grab player's cards, grab everything in the floor, see what cards the player has that have the same value as the cards in the 
-            pass
+            attack_values = {card[0] for card in floor}
+            return [card for card in hand if card[0] in attack_values]
         else:
-            pass
+            return hand
 
 
     def generate_defense_conditions(self, state):

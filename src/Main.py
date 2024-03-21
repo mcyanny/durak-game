@@ -1,5 +1,4 @@
 from Game import Game
-from State import State
 
 game = Game()
 state = game.init_state()
