@@ -1,11 +1,19 @@
 import unittest
+
+import sys
+import os
+project_root = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.abspath(os.path.join(project_root, '..')))
+
 from src.Game import Game
 from src.State import State
 from src.Player import Player
 
 class TestGame(unittest.TestCase):
-    def set_up(self):
+    def setUp(self):
         self.game = Game()
+        self.state = self.game.init_state()
+
 
     def test_generate_deck(self):
         # Test initialization to ensure deck length and trump are correct.

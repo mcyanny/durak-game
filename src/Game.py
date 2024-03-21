@@ -1,5 +1,5 @@
-from State import State
-from Player import Player
+from .State import State
+from .Player import Player
 from random import shuffle
 from typing import *
 

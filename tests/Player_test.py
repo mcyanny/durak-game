@@ -1,4 +1,10 @@
 import unittest
+
+import sys
+import os
+project_root = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.abspath(os.path.join(project_root, '..')))
+
 from ..src.Game import Game
 from ..src.State import State
 
