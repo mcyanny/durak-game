@@ -15,12 +15,19 @@ class State():
         self.players = []   #queue, 0: attacker, 1:defender, 2:second_attacker(players>2), [3:]:others(players>3)
         self.player_roles = {'attacker': None, 'second_attacker': None, 'defender': None, 'others': []}
         
-        #TODO implement an outcome dataframe
-        self.turn_finished = False
-        self.defender_took = False
+        self.status = {
+            'game_finished': False,
+            
+            'turn_done': False,
+            'defender_took': False,
+            
+            'attacker_done': False,
+            'second_attacker_turn': False,
+            'second_attacker_done': False
+        }
 
         # TODO merge deal and draw
-        self.set_players()
+        
         self.initialize_hands()
         
 
@@ -74,6 +81,9 @@ class State():
         """Returns the floor"""
         return self.floor
     
+    def get_status(self):
+        return self.status
+    
     
     def set_player_hand(self, player: Player, hand: deck_type):
         self.hands[player] = hand
@@ -103,8 +113,7 @@ class State():
 
 
     def get_stage(self) -> Player:
-        #TODO
-        pass
+        return self.player_roles['attacker'], self.player_roles['secondary_attacker'], self.player_roles['defender']
 
 
     def reset_floor(self): #resets floor, draws cards, sets new roles, and returns state
@@ -129,5 +138,7 @@ class State():
                 self.player_roles['second attacker'] = self.players[2]
 
         set_player_roles()
+        
+        #check win conditions
         
         return self
