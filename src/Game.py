@@ -29,7 +29,7 @@ class Game:
     def init_state(self):
         """Returns the starting state of the game"""
         trump = self.deck[0]  # Assigning the trump properly
-        
+        #we need to draw from the end of the deck
         state = State(self.deck, trump)
         return state
 
