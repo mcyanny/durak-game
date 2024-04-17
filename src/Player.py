@@ -1,5 +1,7 @@
 from copy import deepcopy
 
+#TODO, make generic Player parent class and have subclasses of different agent types
+
 class Player():
     def __init__(self):
         pass
