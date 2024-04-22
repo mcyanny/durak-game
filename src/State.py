@@ -15,15 +15,19 @@ class State():
         self.players = []   #queue, 0: attacker, 1:defender, 2:second_attacker(players>2), [3:]:others(players>3)
         self.player_roles = {'attacker': None, 'second_attacker': None, 'defender': None, 'others': []}
         
+        self.durak = []
+        
         self.status = {
             'game_finished': False,
+            'draw': False,
             
             'turn_done': False,
             'defender_took': False,
             
             'attacker_done': False,
             'second_attacker_turn': False,
-            'second_attacker_done': False
+            'second_attacker_done': False,
+            'attacker_left': False,
         }
 
         # TODO merge deal and draw
@@ -58,22 +62,6 @@ class State():
         self.player_roles['defender'] = self.players[1]
         if (len(self.players) > 2):
             self.player_roles['second_attacker'] = self.players[2]
-        
-<<<<<<< HEAD
-        # sets player_roles according to who has the lowest value trump
-        # card in their hand
-        if len(self.players) > 2:
-            attacker_index = self.players.index(first_player)
-            self.player_roles['attacker'] = first_player
-            self.player_roles['defender'] = self.players[(attacker_index + 1) % len(self.players)]
-            self.player_roles['second_attacker'] = self.players[(attacker_index + 2) % len(self.players)]  
-            
-        else:
-            attacker_index = self.players.index(first_player)
-            self.player_roles['attacker'] = first_player
-            self.player_roles['defender'] = self.players[(attacker_index + 1) % len(self.players)]
-=======
->>>>>>> 149af421a565fe3cce387950922573fd1df1c913
 
 
     def set_players(self, players_arg: List[Player]): # only at the beginning
@@ -131,12 +119,8 @@ class State():
         others = self.player_roles['others']
         
         for player in others:
-<<<<<<< HEAD
-            draw(player)
-=======
             if player != None:
                 self.draw(player)
->>>>>>> 149af421a565fe3cce387950922573fd1df1c913
             
         self.draw(self.player_roles['defender'])
 
@@ -152,12 +136,15 @@ class State():
         #draws cards to 6
         self.draw_cards()
         
+        # why are you making a function inside of this function that won't ever be used more than once?
+        # TODO get rid of the function declaration and calling unless I get a good reason
         def set_player_roles():
             #preserve the queue, append to end and pop from front
             #attacker moves to back
-            self.players.append(self.players.pop(0))
+            if not self.status['attacker_left']:
+                self.players.append(self.players.pop(0))
             
-            if (self.defender_took): #skips their turn, defender moves to back
+            if (self.status['defender_took']): #skips their turn, defender moves to back
                 self.players.append(self.players.pop(0))
             
             #new roles
@@ -171,3 +158,37 @@ class State():
         #check win conditions
         
         return self
+    
+    
+    def game_over(self):
+        if self.status['game_finished'] == True:
+            self.status['draw'] = True
+        else:
+            self.status['game_finished'] = True
+        
+        
+    def game_not_over(self):
+        return self.status['game_finished']
+    
+    
+    def kick_player(self, player):
+        #ensures set_player_roles() in reset_floor() doesn't skip a player when setting roles
+        if self.player_roles['attacker'] == player:
+            self.status['attacker_left'] = True
+        
+        self.durak.append(player)
+        self.players.remove(player)
+        self.hands.pop(player)
+        
+        if len(self.players) == 1:
+            self.game_over()
+            #in the game logic the next player might end up going even if the game is over, say if a defender is going next, but this is required in case
+            #there are draws
+    
+        """
+        
+        everytime a player leaves, we should check to see if the game is over since that's the only time the game would ever be over. 
+        We're going to need to find a way to check for draws, also. 
+        
+        A game is a draw when 
+        """

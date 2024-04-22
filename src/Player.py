@@ -3,10 +3,14 @@ from copy import deepcopy
 #TODO, make generic Player parent class and have subclasses of different agent types
 
 class Player():
-    def __init__(self):
-        pass
+    def __init__(self, name):
+        self.name = name
 
 
+    def get_name(self):
+        return self.name
+    
+    
     def get_move(self, state, role):
         """
         takes in agent input
@@ -24,6 +28,11 @@ class Player():
             return self.prompt_agent(self, viable_moves, state)
 
 
+    def prompt_agent(self, viable_moves_arg, state_arg):
+        # abstract method, should be implemented separately for each agent!!! should return state modified
+        pass
+    
+    
     def get_viable_attack_cards(self, state):
         """Returns all cards in the attacker's hand that they can use in their attack
 
@@ -79,7 +88,6 @@ class Player():
                      card[0] > last_attacker_card[0])]
 
 
-    def prompt_agent()
     def get_self(self):
         """Returns self"""
         return self

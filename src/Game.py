@@ -57,7 +57,7 @@ class Game:
         state = self.init_state()
         num_players = self.init_players(state)
         
-        while(True): #stops when one player remaining
+        while(state.game_not_over()): #stops when one player remaining
             #One Turn
             att, att2, deff = state.get_stage() #gets players for a given turn
             
@@ -66,12 +66,12 @@ class Game:
             status = state.get_status()
             
             
-            while (not status['turn_done'] and not status['attacker_done'] and not status['second_attacker_turn']):
+            while (not status['turn_done'] and not status['attacker_done'] and not status['second_attacker_turn'] and not status['game_finished']):
                 state = att.get_move(state)
                 state = deff.get_move(state)
                 status = state.get_status()
             
-            while (att2 != None and not status['turn_done'] and not status['second_attacker_done']):
+            while (att2 != None and not status['turn_done'] and not status['second_attacker_done'] and not status['game_finished']):
                 state = att2.get_move(state)
                 state = deff.get_move(state)
                 status = state.get_status()
@@ -89,5 +89,18 @@ class Game:
                 #the only place where we ask players to give cards
                 pass
             
-            
+            # Yan why the fuck would you do this? Why is state returning itself when its attributes are updated in place?
             state = state.reset_floor() #draws and resets
+        
+        #I'm thinking that once we have the state tree set up we'll be able to use that tree to find the players who drew the game
+        #but for now I've added them to a list. It should also return this information for when we 
+        status = state.get_status()
+        draw = status['draw']
+        duraks = state.durak
+        
+        if draw:
+            print(f"The game was a draw between durak {duraks[0].get_name()} and durak {duraks[1].get_name()}.")
+        else:
+            print(f"The durak is {duraks[0]}")
+            
+        return duraks
