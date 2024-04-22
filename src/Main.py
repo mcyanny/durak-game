@@ -1,6 +1,7 @@
-from .Game import Game
+from Game import Game
 
 game = Game()
+<<<<<<< HEAD
 state = game.init_state()
 players = game.init_players(state)
 state.deal_cards()
@@ -29,3 +30,7 @@ while(True): #stops when one player remaining
         state.reset_floor() #draws, sets new players, disqualifies no card idiots
 
 #end of game
+=======
+
+game.play()
+>>>>>>> 149af421a565fe3cce387950922573fd1df1c913
