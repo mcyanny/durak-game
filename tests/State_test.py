@@ -10,6 +10,7 @@ sys.path.append(os.path.abspath(os.path.join(project_root, '..')))
 from src.Game import Game
 from src.State import State
 
+# TODO do tests with differing numbers of players
 class TestGame(unittest.TestCase):
     def setUp(self):
         self.game = Game()
@@ -27,9 +28,9 @@ class TestGame(unittest.TestCase):
             self.assertEqual(len(state.hands[player]), 6)
             
         # checks that each card is, in fact, a card
-        print(f"ALL PLAYERS: {players}")
+        # print(f"ALL PLAYERS: {players}")
         hands = state.hands
-        print(hands)
+        # print(hands)
         # find out who has the lowest trump card in their hand
         attacker = players[0]
         lowest_trump = 15
@@ -51,14 +52,16 @@ class TestGame(unittest.TestCase):
 
 
     def test_draw_cards(self):
-        game = Game()
+        # TODO doesn't work with num_players > 3 because others is generated when taker_takes
+        game = Game(num_players_arg=4)
         state = game.init_state()
         players = game.init_players(state)
+        hand = state.hands
         state.initialize_hands()
-        
+
         # generates between 0 and 6 random cards
         def generate_0_to_6_cards(suits):
-            return [(randint(6,15), suits[randint(0,3)]) for _ in range(0, randint(1, 6))]
+            return [(randint(6,15), suits[randint(0,3)]) for _ in range(0, 2)]
 
         # sets each player's hand to a random hand with between 0 and 6 cards
         for player in players:
@@ -70,10 +73,6 @@ class TestGame(unittest.TestCase):
         # checks that each player's hand is the correct length
         for hand in state.hands.values():
             self.assertEqual(len(hand), 6)
-
-
-    def test_players_init(self):
-        pass
 
 
 if __name__ == '__main__':

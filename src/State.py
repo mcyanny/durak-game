@@ -44,7 +44,7 @@ class State():
             self.player_roles['attacker'] = first_player
             self.player_roles['defender'] = self.players[(attacker_index + 1) % len(self.players)]
             self.player_roles['second_attacker'] = self.players[(attacker_index + 2) % len(self.players)]  
-               
+            
         else:
             attacker_index = self.players.index(first_player)
             self.player_roles['attacker'] = first_player
@@ -61,6 +61,7 @@ class State():
         """
         self.players = players_arg
     
+    
     """GETTERS AND SETTERS"""
     def get_player_roles(self):
         """Returns the player_roles dictionary"""
@@ -70,6 +71,14 @@ class State():
     def get_floor(self):
         """Returns the floor"""
         return self.floor
+    
+    
+    def get_trump(self):
+        return self.trump
+    
+    
+    def get_trump_suit(self):
+        return self.trump_suit
     
     
     def set_player_hand(self, player: Player, hand: deck_type):
@@ -91,9 +100,9 @@ class State():
         
         # TODO needs to make sure that they're drawing in the order that they gave the cards to the defender
         others = self.player_roles['others']
+        
         for player in others:
-            if player != None:
-                draw(player)
+            draw(player)
             
         draw(self.player_roles['defender'])
 
