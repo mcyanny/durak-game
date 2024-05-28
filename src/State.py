@@ -25,15 +25,13 @@ class State():
             'defender_took': False,
             
             'attacker_done': False,
-            'second_attacker_turn': False,
             'second_attacker_done': False,
+            
             'attacker_left': False,
         }
 
         # TODO merge deal and draw
-        
-        self.initialize_hands()
-        
+
 
     """INIT METHODS (run once)"""
     def initialize_hands(self):
@@ -64,7 +62,7 @@ class State():
             self.player_roles['second_attacker'] = self.players[2]
 
 
-    def set_players(self, players_arg: List[Player]): # only at the beginning
+    def set_players(self, players_arg: List[Player]):
         """
         Sets self.players to players_arg
         FROM GAME CLASS
@@ -85,6 +83,7 @@ class State():
         """Returns the floor"""
         return self.floor
     
+    
     def get_status(self):
         return self.status
     
@@ -97,16 +96,32 @@ class State():
         return self.trump_suit
     
     
+    def get_players(self):
+        return self.players
+    
+    
     def set_player_hand(self, player: Player, hand: deck_type):
         self.hands[player] = hand
 
 
+    def set_status_value(self, key, value):
+        self.status[key] = value
+
+
+    # get_stage in START ROUND
+    
+    """CARD HANDLING"""
+    def remove_card_from_hand(self, player, card):
+        self.hands[player].remove(card)
+    
+    
     """DRAW CARDS"""
             
     def draw(self, player):
         while (len(self.hands[player]) < 6 and len(self.deck) > 0):
             self.hands[player].append(self.deck.pop())
-            
+        
+        
     def draw_cards(self):
         """draws cards til 6 for each player in order"""
         
@@ -125,10 +140,22 @@ class State():
         self.draw(self.player_roles['defender'])
 
 
+    """START ROUND"""
     def get_stage(self) -> Player:
         return self.player_roles['attacker'], self.player_roles['secondary_attacker'], self.player_roles['defender']
 
 
+    def play_move(self, card_arg, player_arg):
+        # appends to floor, removes from player's hand, puts them into others if necessary
+        self.floor.append(card_arg)
+        self.remove_card_from_hand(player_arg, card_arg)
+        
+        # checks if they meet win conditions
+        if not self.hands[player_arg] and not self.deck:
+            self.kick_player(player_arg)
+    
+    
+    """END ROUND"""
     def reset_floor(self): #resets floor, draws cards, sets new roles, and returns state
         
         self.floor = []
@@ -136,7 +163,6 @@ class State():
         #draws cards to 6
         self.draw_cards()
         
-        # why are you making a function inside of this function that won't ever be used more than once?
         # TODO get rid of the function declaration and calling unless I get a good reason
         def set_player_roles():
             #preserve the queue, append to end and pop from front
@@ -160,6 +186,7 @@ class State():
         return self
     
     
+    """ENDING GAME"""
     def game_over(self):
         if self.status['game_finished'] == True:
             self.status['draw'] = True
@@ -174,21 +201,18 @@ class State():
     def kick_player(self, player):
         #ensures set_player_roles() in reset_floor() doesn't skip a player when setting roles
         if self.player_roles['attacker'] == player:
-            self.status['attacker_left'] = True
-        
-        self.durak.append(player)
+            self.status['attacker_done'], self.status['attacker_left'] = True, True
+        elif self.player_roles['second_attacker'] == player:
+            self.status['second_attacker_done'] = True
+        elif self.player_roles['defender'] == player:
+            self.status['turn_done'] = True
+            
+        #TODO get losing player and draw players
         self.players.remove(player)
         self.hands.pop(player)
         
-        if len(self.players) == 1:
+        if len(self.players) <= 1: #set's game as over, or draw if ran twice.
+            self.durak.append(player)
             self.game_over()
-            #in the game logic the next player might end up going even if the game is over, say if a defender is going next, but this is required in case
-            #there are draws
     
-        """
-        
-        everytime a player leaves, we should check to see if the game is over since that's the only time the game would ever be over. 
-        We're going to need to find a way to check for draws, also. 
-        
-        A game is a draw when 
-        """
+    

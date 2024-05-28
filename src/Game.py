@@ -36,13 +36,12 @@ class Game:
 
     def init_players(self, state):
         """Initializes the players in the game's state"""
-        # TODO initialize the players
         players = []
         for player in range(0, self.num_players):
             player = Player()
             players.append(player)
         state.set_players(players)
-        return players
+        return state
 
 
     def generate_deck(self):
@@ -52,28 +51,30 @@ class Game:
                         for suit in self.SUITS]
         shuffle(self.deck) # Shuffles self.deck in place
 
+
     def play(self):
-        
+        # sets up the initial state of the game
         state = self.init_state()
-        num_players = self.init_players(state)
+        state = self.init_players(state)
+        state.initialize_hands()
         
         while(state.game_not_over()): #stops when one player remaining
             #One Turn
             att, att2, deff = state.get_stage() #gets players for a given turn
             
-            state = att.get_move(state)
-            state = deff.get_move(state)
+            state = att.get_move(state, 'attacker') #inserting role as a string feels stupid, but alternatives feel even dumber
+            state = deff.get_move(state, 'defender')
             status = state.get_status()
             
             
-            while (not status['turn_done'] and not status['attacker_done'] and not status['second_attacker_turn'] and not status['game_finished']):
-                state = att.get_move(state)
-                state = deff.get_move(state)
+            while (not status['turn_done'] and not status['attacker_done'] and not status['game_finished']):
+                state = att.get_move(state, 'attacker')
+                state = deff.get_move(state, 'defender')
                 status = state.get_status()
             
             while (att2 != None and not status['turn_done'] and not status['second_attacker_done'] and not status['game_finished']):
-                state = att2.get_move(state)
-                state = deff.get_move(state)
+                state = att2.get_move(state, 'attacker')
+                state = deff.get_move(state, 'defender')
                 status = state.get_status()
             
             # defender defends, keep going
@@ -85,22 +86,17 @@ class Game:
             # second passes
             
             if (status['defender_took']):
-                #let each player contribute cards
-                #the only place where we ask players to give cards
-                pass
+                # each player contributes what they want/can
+                players = state.get_players()
+                for player in players:
+                    player.give_to_defender(state)
+                
+                # defender takes all cards from the floor
+                for card in state.get_floor():
+                    state.hands[deff].append(card)
             
-            # Yan why the fuck would you do this? Why is state returning itself when its attributes are updated in place?
             state = state.reset_floor() #draws and resets
         
-        #I'm thinking that once we have the state tree set up we'll be able to use that tree to find the players who drew the game
-        #but for now I've added them to a list. It should also return this information for when we 
         status = state.get_status()
-        draw = status['draw']
-        duraks = state.durak
-        
-        if draw:
-            print(f"The game was a draw between durak {duraks[0].get_name()} and durak {duraks[1].get_name()}.")
-        else:
-            print(f"The durak is {duraks[0]}")
-            
-        return duraks
+        durak = state.durak if status['draw'] else state.durak[0]
+        return durak

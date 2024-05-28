@@ -1,35 +1,60 @@
 from copy import deepcopy
+from typing import *
 
 #TODO, make generic Player parent class and have subclasses of different agent types
 
 class Player():
-    def __init__(self, name):
-        self.name = name
+    def __init__(self):
+        self.name = None
 
 
     def get_name(self):
         return self.name
     
     
-    def get_move(self, state, role):
-        """
-        takes in agent input
-        checks agent input based off of current attack and role
-        returns state
-        """
-        attempts = 0
-        while attempts < 20:
-            attempts += 1
-            if role == 'attacker':
-                viable_moves = self.get_viable_attack_cards(state)
-            elif role == 'defender':
-                viable_moves = self.get_viable_defense_cards(state)
-            
-            return self.prompt_agent(self, viable_moves, state)
+    def get_move(self, state, role: str):
+        if state.get_status()['turn_done']: #if attacker runs out of cards and didn't go, it will be defender's turn but they won't have any attack to defend
+            return state
+        
+        attacker = True if role == 'attacker' else False
+        
+        if attacker:
+            viable_moves = self.get_viable_attack_cards(state)
+        else:
+            viable_moves = self.get_viable_defense_cards(state)
+
+        if viable_moves:
+            chosen_card = self.prompt_agent_card(self, viable_moves, state) # should be the card that they want to play, then we alter the state accordingly.
+            if chosen_card != 'n': #if they chose to play a move
+                state.play_move(chosen_card, self.get_self())
+                return state
+        if attacker: #alters state if player doesn't have available cards or chose not to play
+            if state.get_status()['attacker_done'] == True:
+                state.set_status_value('second_attacker_done', True)
+                return state
+            else:
+                state.set_status_value('attacker_done', True)
+                return state
+        else:
+            state.set_status_value('defender_took', True)
+            state.set_status_value('turn_done', True)
+            return state
 
 
-    def prompt_agent(self, viable_moves_arg, state_arg):
-        # abstract method, should be implemented separately for each agent!!! should return state modified
+    def give_to_defender(self, state):
+        me = self.get_self()
+        viable_moves = self.get_viable_attack_cards(state)
+        if viable_moves:
+            cards = self.prompt_agent_giving(viable_moves, state)
+            for card in cards:
+                state.play_move(card, me)
+        
+        
+    def prompt_agent_card(self, viable_moves_arg, state_arg): # abstract method, should be implemented separately for each agent!!! should return state modified
+        pass
+    
+    
+    def prompt_agent_giving(self, viable_moves_arg, state_arg): # abstract method
         pass
     
     
@@ -91,5 +116,4 @@ class Player():
     def get_self(self):
         """Returns self"""
         return self
-    
 
