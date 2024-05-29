@@ -1,4 +1,4 @@
-import Player
+from ..Player import Player
 
 class Human_Agent(Player):
     def prompt_agent_card(self, viable_cards_arg, state_arg):

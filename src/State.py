@@ -1,5 +1,5 @@
 from typing import *
-from Player import Player
+from .Player import Player
 
 card = Tuple[int, str]
 deck_type = List[card]

@@ -1,6 +1,6 @@
-from State import State
-from Player import Player
-from Agents import Human_Agent, Simplest_Agent
+from .State import State
+from .Player import Player
+from .Agents import Human_Agent, Simplest_Agent
 from random import shuffle
 from typing import *
 
