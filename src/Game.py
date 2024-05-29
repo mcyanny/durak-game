@@ -1,5 +1,6 @@
-from .State import State
-from .Player import Player
+from State import State
+from Player import Player
+from Agents import Human_Agent, Simplest_Agent
 from random import shuffle
 from typing import *
 
@@ -39,7 +40,7 @@ class Game:
         """Initializes the players in the game's state"""
         players = []
         for player in range(0, self.num_players):
-            player = Player()
+            player = Simplest_Agent()
             players.append(player)
         state.set_players(players)
         return state

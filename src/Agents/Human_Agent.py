@@ -26,7 +26,7 @@ class Human_Agent(Player):
     def prompt_agent_giving(self, viable_cards_arg, state_arg):
         num_viable_cards = len(viable_cards_arg)
         
-        prompt_message = f"Which cards would you like to give to the defender? 
+        prompt_message = f"Which cards would you like to give to the defender? \
         Separate your answers with commas.\n{list(enumerate(viable_cards_arg))}\t"
         error_message = f"You messed something up, input was invalid. Try again."
         condition = self.human_gives_condition_generator(num_viable_cards)
