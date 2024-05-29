@@ -147,12 +147,13 @@ class State():
 
     def play_move(self, card_arg, player_arg):
         # appends to floor, removes from player's hand, puts them into others if necessary
-        self.floor.append(card_arg)
-        self.remove_card_from_hand(player_arg, card_arg)
+        if card_arg != 'n':
+            self.floor.append(card_arg)
+            self.remove_card_from_hand(player_arg, card_arg)
         
-        # checks if they meet win conditions
-        if not self.hands[player_arg] and not self.deck:
-            self.kick_player(player_arg)
+            # checks if they meet win conditions
+            if not self.hands[player_arg] and not self.deck:
+                self.kick_player(player_arg)
     
     
     """END ROUND"""

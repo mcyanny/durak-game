@@ -26,6 +26,7 @@ class Game:
         self.generate_deck() # sets self.deck to a full shuffled deck_type
 
 
+    """INIT METHODS (run once)"""
     def init_state(self):
         """Returns the starting state of the game"""
         trump = self.deck[0]  # Assigning the trump properly
@@ -52,6 +53,7 @@ class Game:
         shuffle(self.deck) # Shuffles self.deck in place
 
 
+    """GAME LOOP"""
     def play(self):
         # sets up the initial state of the game
         state = self.init_state()

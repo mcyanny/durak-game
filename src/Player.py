@@ -46,15 +46,23 @@ class Player():
         viable_moves = self.get_viable_attack_cards(state)
         if viable_moves:
             cards = self.prompt_agent_giving(viable_moves, state)
-            for card in cards:
-                state.play_move(card, me)
+            if cards != 'n':
+                state.player_roles['others'].append(me)
+                for card in cards:
+                    state.play_move(card, me)
         
         
     def prompt_agent_card(self, viable_moves_arg, state_arg): # abstract method, should be implemented separately for each agent!!! should return state modified
+        """
+        Should return either 'n' or a card
+        """
         pass
     
     
     def prompt_agent_giving(self, viable_moves_arg, state_arg): # abstract method
+        """
+        Should return either 'n' or a list of cards
+        """
         pass
     
     

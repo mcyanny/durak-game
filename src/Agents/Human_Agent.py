@@ -38,7 +38,7 @@ class Human_Agent(Player):
     def human_card_condition_generator(self, num_viable_cards):
         def condition(self, user_input): #checks that human input is consistent with available options
             user_input = int(user_input)
-            if user_input < num_viable_cards and user_input >= 0:
+            if user_input < num_viable_cards and user_input >= 0 or user_input == 'n':
                 return True
             else:
                 return False
@@ -47,6 +47,9 @@ class Human_Agent(Player):
 
     def human_gives_condition_generator(self, num_viable_cards):
         def condition(self, user_input):
+            if user_input == 'n':
+                return True
+            
             split = [int(inp.strip()) for inp in user_input.split(',')]
             for value in split:
                 if value > num_viable_cards or value < 0:
@@ -60,7 +63,7 @@ class Human_Agent(Player):
         while attempts <= 10:
             try:
                 user_input = input(prompt_message)
-                if condition(user_input) or user_input == 'n':
+                if condition(user_input):
                     return user_input
                 else:
                     print(error_message)
