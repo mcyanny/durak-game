@@ -100,6 +100,10 @@ class State():
         return self.players
     
     
+    def get_player_hand(self, player):
+        return self.hands[player]
+    
+    
     def set_player_hand(self, player: Player, hand: deck_type):
         self.hands[player] = hand
 
@@ -118,6 +122,8 @@ class State():
     """DRAW CARDS"""
             
     def draw(self, player):
+        if player == None: #player_roles has Player set to None if Player leaves
+            return None
         while (len(self.hands[player]) < 6 and len(self.deck) > 0):
             self.hands[player].append(self.deck.pop())
         
@@ -142,7 +148,7 @@ class State():
 
     """START ROUND"""
     def get_stage(self) -> Player:
-        return self.player_roles['attacker'], self.player_roles['secondary_attacker'], self.player_roles['defender']
+        return self.player_roles['attacker'], self.player_roles['second_attacker'], self.player_roles['defender']
 
 
     def play_move(self, card_arg, player_arg):
@@ -180,9 +186,17 @@ class State():
             if (len(self.players) > 2):
                 self.player_roles['second attacker'] = self.players[2]
 
-        set_player_roles()
+        if len(self.players) > 1:
+            set_player_roles()
         
-        #check win conditions
+        def reset_status():
+            self.set_status_value('turn_done', False)
+            self.set_status_value('defender_took', False)
+            self.set_status_value('attacker_done', False)
+            self.set_status_value('second_attacker_done', False)
+            self.set_status_value('attacker_left', False)
+        
+        reset_status()
         
         return self
     
@@ -196,17 +210,22 @@ class State():
         
         
     def game_not_over(self):
-        return self.status['game_finished']
+        return not self.status['game_finished']
     
     
     def kick_player(self, player):
         #ensures set_player_roles() in reset_floor() doesn't skip a player when setting roles
         if self.player_roles['attacker'] == player:
+            self.player_roles['attacker'] = None
             self.status['attacker_done'], self.status['attacker_left'] = True, True
         elif self.player_roles['second_attacker'] == player:
+            self.player_roles['second_attacker'] = None
             self.status['second_attacker_done'] = True
         elif self.player_roles['defender'] == player:
+            self.player_roles['defender'] = None
             self.status['turn_done'] = True
+        elif player in self.player_roles['others']:
+            self.player_roles['others'].remove(player)
             
         #TODO get losing player and draw players
         self.players.remove(player)

@@ -24,7 +24,7 @@ class Player():
             viable_moves = self.get_viable_defense_cards(state)
 
         if viable_moves:
-            chosen_card = self.prompt_agent_card(self, viable_moves, state) # should be the card that they want to play, then we alter the state accordingly.
+            chosen_card = self.prompt_agent_card(viable_moves, state) # should be the card that they want to play, then we alter the state accordingly.
             if chosen_card != 'n': #if they chose to play a move
                 state.play_move(chosen_card, self.get_self())
                 return state
@@ -47,7 +47,8 @@ class Player():
         if viable_moves:
             cards = self.prompt_agent_giving(viable_moves, state)
             if cards != 'n':
-                state.player_roles['others'].append(me)
+                if state.player_roles['attacker'] != me and state.player_roles['second_attacker'] != me and state.player_roles['defender'] != me:
+                    state.player_roles['others'].append(me)
                 for card in cards:
                     state.play_move(card, me)
         
