@@ -15,8 +15,8 @@ class Human_Agent(Player):
         try:
             error_message = "You messed something up, input was invalid. Try again."
             prompt = f"What card would you like to choose?\n{list(enumerate(viable_cards_arg))}\t"
-            user_input = self.prompt_human(prompt, error_message, num_viable_cards)
-            chosen_card = viable_cards_arg(int(user_input)) if user_input.isnumeric() else user_input if user_input == 'n' else float('inf')
+            user_input = self.prompt_human(prompt, error_message, condition)
+            chosen_card = viable_cards_arg[int(user_input)] if user_input.isnumeric() else user_input if user_input == 'n' else float('inf')
         except Exception as e: #did this high but think it's funny asf so it's gonna stay
             raise ValueError(f"Human user {my_name} gave invalid input resulting in {e}")
         
@@ -36,9 +36,9 @@ class Human_Agent(Player):
     
     
     def human_card_condition_generator(self, num_viable_cards):
-        def condition(self, user_input): #checks that human input is consistent with available options
-            user_input = int(user_input)
-            if user_input < num_viable_cards and user_input >= 0 or user_input == 'n':
+        def condition(user_input): #checks that human input is consistent with available options
+            int_input = int(user_input)
+            if (int_input < num_viable_cards and int_input >= 0) or int_input == 'n':
                 return True
             else:
                 return False
@@ -46,7 +46,7 @@ class Human_Agent(Player):
 
 
     def human_gives_condition_generator(self, num_viable_cards):
-        def condition(self, user_input):
+        def condition(user_input):
             if user_input == 'n':
                 return True
             
@@ -69,3 +69,4 @@ class Human_Agent(Player):
                     print(error_message)
             except Exception as e:
                 print(f"Error message: {error_message} - Error: {e}")
+        raise ValueError("You failed to provide correct input 10 times.")
