@@ -2,7 +2,7 @@ from .Game import Game
 
 game = Game()
 
-result = game.play()
+result, log = game.play()
 
 print(result)
 

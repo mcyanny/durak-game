@@ -14,3 +14,5 @@ class Simplest_Agent(Player):
     
     def prompt_agent_giving(self, viable_cards_arg, state_arg):
         return viable_cards_arg
+    
+    

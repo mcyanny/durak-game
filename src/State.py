@@ -7,6 +7,7 @@ deck_type = List[card]
 
 class State():
     def __init__(self, deck: deck_type, trump: card):
+        self.last_event = ()
         self.deck = deck
         self.trump = trump
         self.trump_suit = trump[1]
@@ -104,12 +105,20 @@ class State():
         return self.hands[player]
     
     
+    def get_last_event(self):
+        return self.last_event
+    
+    
     def set_player_hand(self, player: Player, hand: deck_type):
         self.hands[player] = hand
 
 
     def set_status_value(self, key, value):
         self.status[key] = value
+        
+        
+    def log_last(self, event):
+        self.last_event = event
 
 
     # get_stage in START ROUND
@@ -139,9 +148,13 @@ class State():
         # TODO needs to make sure that they're self.drawing in the order that they gave the cards to the defender
         others = self.player_roles['others']
         
+        event = ('draws', {'players': []})
         for player in others:
             if player != None:
                 self.draw(player)
+                event[1]['players'].append(player)
+        self.log_last(event)
+
             
         self.draw(self.player_roles['defender'])
 
@@ -153,6 +166,7 @@ class State():
 
     def play_move(self, card_arg, player_arg):
         # appends to floor, removes from player's hand, puts them into others if necessary
+        self.log_last('player_action', {'player': player_arg, 'action': card_arg})
         if card_arg != 'n':
             self.floor.append(card_arg)
             self.remove_card_from_hand(player_arg, card_arg)

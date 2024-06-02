@@ -6,6 +6,7 @@ from typing import *
 class Player():
     def __init__(self):
         self.name = None
+        self.last_event = None
 
 
     def get_name(self):
@@ -46,6 +47,7 @@ class Player():
         viable_moves = self.get_viable_attack_cards(state)
         if viable_moves:
             cards = self.prompt_agent_giving(viable_moves, state)
+            self.log_last(('gives', {'player': me, 'gave': cards}))
             if cards != 'n':
                 if state.player_roles['attacker'] != me and state.player_roles['second_attacker'] != me and state.player_roles['defender'] != me:
                     state.player_roles['others'].append(me)
@@ -126,3 +128,10 @@ class Player():
         """Returns self"""
         return self
 
+
+    def log_last(self, event):
+        self.last_event = event
+        
+        
+    def get_last_event(self):
+        return self.last_event
